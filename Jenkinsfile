@@ -5,13 +5,18 @@ pipeline {
     
     }
     stages {
-        stage('Compile and Clean') { 
-            steps {
-                // Run Maven on a Unix agent.
-              
-                sh "mvn clean compile"
-            }
-        }
+        stage("git clone"){
+  steps {
+    git 'https://github.com/sunilbennur/spring-boot-mongo-docker.git'
+  }
+}
+stage("Maven clean build") {
+  steps { 
+    def mavenHome = tool name:"Maven-3.8.6", type: "maven"
+    def mavenCMD = "${mavenHome}/bin/mvn"
+    sh "${mavenCMD} clean package"
+   }
+}
         stage('deploy') { 
             
             steps {
